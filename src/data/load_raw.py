@@ -9,6 +9,4 @@ def load_raw_listings() -> pd.DataFrame:
         raise FileNotFoundError(f"No CSV files found in {RAW_LISTINGS_DIR}")
 
     dataframes = [pd.read_csv(file) for file in csv_files]
-    df = pd.concat(dataframes, ignore_index=True)
-
-    return df
+    return pd.concat(dataframes, ignore_index=True).drop_duplicates()
