@@ -63,13 +63,10 @@ def clean_categorical_values(df: pd.DataFrame) -> pd.DataFrame:
 
 def prepare_modeling_base(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
-
     if "level6" in df.columns:
         df = df.drop(columns=["level6"])
-
     if "level8" in df.columns:
         df = df[df["level8"].notna()].reset_index(drop=True)
-
     return df
 
 
@@ -80,10 +77,6 @@ def create_modeling_dataset(df: pd.DataFrame):
     X = df[SELECTED_FEATURES].copy()
     y = df["value"].copy()
 
-    X_encoded = pd.get_dummies(
-        X,
-        columns=CATEGORICAL_FEATURES,
-        drop_first=True,
-    )
+    X_encoded = pd.get_dummies(X, columns=CATEGORICAL_FEATURES, drop_first=True)
 
     return X_encoded, y, df
