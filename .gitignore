@@ -3,3 +3,4 @@
 flats_env
 /data
 __pycache__
+venv/
