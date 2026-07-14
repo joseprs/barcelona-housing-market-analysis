@@ -10,20 +10,45 @@ The objective is not only to build a predictive model, but to create a structure
 
 ## Project Overview
 
-The project is organized into four analytical modules:
+The project is organized into five components:
 
-1. **Market Snapshot**
-2. **Valuation Model**
-3. **Relative Price Positioning**
-4. **Affordability Scenarios**
+1. **Listing Data Collection**
+2. **Market Snapshot**
+3. **Valuation Model**
+4. **Relative Price Positioning**
+5. **Affordability Scenarios**
 
-Each module is implemented as a clean notebook supported by reusable Python code in `src/`.
+The data collection and preparation logic is implemented as reusable Python scripts in `src/`.
 
-The notebooks focus on analysis, interpretation, and outputs, while data preparation, modeling utilities, and analytical functions are separated into scripts.
+The analytical modules are implemented as clean notebooks supported by reusable Python code. The notebooks focus on analysis, interpretation, and outputs, while scraping, data preparation, modeling utilities, and analytical functions are separated into scripts.
 
 ---
 
-## 1. Market Snapshot
+## 1. Listing Data Collection
+
+**Script:** `src/scraping/collect_listings.py`
+
+This component collects raw housing listing data from the underlying search and property-detail endpoints used by the listing platform.
+
+The collection process retrieves listing IDs from paginated search results and then collects detailed information for each listing, including property characteristics, location fields, price information, multimedia counts, energy indicators, and available amenities.
+
+The collected raw files are saved under:
+
+    data/raw/listings/
+
+These files are then consumed by the data preparation pipeline to build the processed dataset used throughout the analysis.
+
+Main outputs:
+
+- Raw listing CSV files
+- Listing-level property attributes
+- Price and transaction information
+- Location and coordinate fields
+- Amenity and feature indicators
+
+---
+
+## 2. Market Snapshot
 
 **Notebook:** `notebooks/01_market_snapshot.ipynb`
 
@@ -41,7 +66,7 @@ Main outputs:
 
 ---
 
-## 2. Valuation Model
+## 3. Valuation Model
 
 **Notebook:** `notebooks/02_valuation_model.ipynb`
 
@@ -61,7 +86,7 @@ Main outputs:
 
 ---
 
-## 3. Relative Price Positioning
+## 4. Relative Price Positioning
 
 **Notebook:** `notebooks/03_relative_price_positioning.ipynb`
 
@@ -79,7 +104,7 @@ Main outputs:
 
 ---
 
-## 4. Affordability Scenarios
+## 5. Affordability Scenarios
 
 **Notebook:** `notebooks/04_affordability_scenarios.ipynb`
 
@@ -106,6 +131,7 @@ Main outputs:
     │
     ├── data/
     │   ├── raw/
+    │   │   └── listings/
     │   ├── processed/
     │   └── external/
     │
@@ -129,6 +155,7 @@ Main outputs:
     │   ├── data/
     │   ├── modeling/
     │   └── scraping/
+    │       └── collect_listings.py
     │
     ├── .gitignore
     ├── README.md
@@ -141,7 +168,7 @@ Main outputs:
 The project follows a modular data science workflow:
 
 1. **Data acquisition**  
-   Housing listing data is collected and stored as raw files.
+   Housing listing data is collected from paginated search results and listing-detail endpoints. The raw extracted records are stored as CSV files.
 
 2. **Data preparation**  
    Raw files are consolidated, cleaned, standardized, filtered, and transformed into an analysis-ready dataset.
@@ -169,6 +196,8 @@ Important limitations:
 - Listing data can vary in completeness and accuracy.
 - Salary estimates are linked geographically and should be interpreted as local income proxies.
 - Mortgage calculations are scenario-based and do not reproduce exact bank approval processes or full amortization schedules.
+- Data collection depends on the availability and stability of the listing platform endpoints.
+- The scraping script is intended for reproducible research and should be used responsibly, with delays between requests.
 
 The results should therefore be interpreted as structured evidence from the listing market, not as definitive estimates of the full housing market.
 
@@ -186,6 +215,8 @@ The results should therefore be interpreted as structured evidence from the list
 - Folium
 - Matplotlib
 - Seaborn
+- requests
+- tqdm
 - Jupyter Notebook
 
 ---
@@ -195,6 +226,10 @@ The results should therefore be interpreted as structured evidence from the list
 Install dependencies:
 
     pip install -r requirements.txt
+
+Collect raw listing data:
+
+    python -m src.scraping.collect_listings --start-page 1 --end-page 50
 
 Generate the processed dataset:
 
