@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Barcelona Flat Price Predictor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+            color: #222;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 9px;
+            box-sizing: border-box;
+        }
+
+        .full-width {
+            grid-column: 1 / 3;
+        }
+
+        button {
+            padding: 12px 18px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .result {
+            padding: 20px;
+            background: #f4f4f4;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+
+        .result strong {
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Barcelona Flat Price Predictor</h1>
+    <p class="subtitle">
+        Estimate the asking price of a flat in Barcelona based on property characteristics.
+    </p>
+
+    <form method="post" action="/predict">
+        <div>
+            <label for="surface">Surface (sqm)</label>
+            <input type="number" step="0.1" name="surface" required value="{{ form.surface if form else 85 }}">
+        </div>
+
+        <div>
+            <label for="rooms">Rooms</label>
+            <input type="number" name="rooms" required value="{{ form.rooms if form else 3 }}">
+        </div>
+
+        <div>
+            <label for="bathrooms">Bathrooms</label>
+            <input type="number" name="bathrooms" required value="{{ form.bathrooms if form else 2 }}">
+        </div>
+
+        <div>
+            <label for="level8">Neighborhood</label>
+            <select name="level8" required>
+                {% for neighborhood in metadata.neighborhoods %}
+                    <option value="{{ neighborhood }}" {% if form and form.level8 == neighborhood %}selected{% endif %}>
+                        {{ neighborhood }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="floor_desc">Floor</label>
+            <select name="floor_desc">
+                {% for floor in metadata.floor_values %}
+                    <option value="{{ floor }}" {% if form and form.floor_desc == floor %}selected{% endif %}>
+                        {{ floor }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="energy_letter">Energy rating</label>
+            <select name="energy_letter">
+                <option value="">Unknown</option>
+                {% for value in metadata.energy_letters %}
+                    <option value="{{ value }}" {% if form and form.energy_letter == value %}selected{% endif %}>
+                        {{ value }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="environment_letter">Environmental rating</label>
+            <select name="environment_letter">
+                <option value="">Unknown</option>
+                {% for value in metadata.environment_letters %}
+                    <option value="{{ value }}" {% if form and form.environment_letter == value %}selected{% endif %}>
+                        {{ value }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div>
+            <label for="energy_value">Energy value</label>
+            <input type="number" step="0.1" name="energy_value" value="{{ form.energy_value if form else '' }}">
+        </div>
+
+        <div>
+            <label for="environment_value">Environmental value</label>
+            <input type="number" step="0.1" name="environment_value" value="{{ form.environment_value if form else '' }}">
+        </div>
+
+        <div>
+            <label for="elevator">Elevator</label>
+            <select name="elevator">
+                <option value="false">No</option>
+                <option value="true" {% if form and form.elevator %}selected{% endif %}>Yes</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="air_conditioning">Air conditioning</label>
+            <select name="air_conditioning">
+                <option value="false">No</option>
+                <option value="true" {% if form and form.air_conditioning %}selected{% endif %}>Yes</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="pool">Pool</label>
+            <select name="pool">
+                <option value="false">No</option>
+                <option value="true" {% if form and form.pool %}selected{% endif %}>Yes</option>
+            </select>
+        </div>
+
+        <div class="full-width">
+            <button type="submit">Predict price</button>
+        </div>
+    </form>
+
+    {% if result %}
+        <div class="result">
+            <p>Estimated asking price:</p>
+            <strong>{{ "{:,.0f}".format(result.predicted_price_rounded).replace(",", ".") }} €</strong>
+            <p>Estimated price per sqm: {{ "{:,.0f}".format(result.predicted_price_per_sqm).replace(",", ".") }} €/sqm</p>
+        </div>
+    {% endif %}
+</body>
+</html>

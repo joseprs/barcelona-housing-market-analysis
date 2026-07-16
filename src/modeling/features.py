@@ -37,26 +37,13 @@ def clean_categorical_values(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
 
     if "level8" in df.columns:
-        df["level8"] = (
-            df["level8"]
-            .str.replace(r"[ '.,-]", "_", regex=True)
-            .apply(remove_accents)
-        )
+        df["level8"] = df["level8"].str.replace(r"[ '.,-]", "_", regex=True).apply(remove_accents)
 
     if "floor_desc" in df.columns:
-        df["floor_desc"] = (
-            df["floor_desc"]
-            .str.replace("ª", "", regex=False)
-            .str.replace(" ", "", regex=False)
-            .apply(remove_accents)
-        )
+        df["floor_desc"] = df["floor_desc"].str.replace("ª", "", regex=False).str.replace(" ", "", regex=False).apply(remove_accents)
 
     if "antiquity_desc" in df.columns:
-        df["antiquity_desc"] = (
-            df["antiquity_desc"]
-            .apply(remove_accents)
-            .str.replace(r"anos|\s", "", regex=True)
-        )
+        df["antiquity_desc"] = df["antiquity_desc"].apply(remove_accents).str.replace(r"anos|\s", "", regex=True)
 
     return df
 
