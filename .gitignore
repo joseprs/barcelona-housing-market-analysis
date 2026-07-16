@@ -19,11 +19,6 @@ data/external/
 
 # Models
 models/*.pkl
-models/*.joblib
-
-# Reports generated outputs
-reports/figures/
-reports/tables/
 
 # OS files
 .DS_Store
