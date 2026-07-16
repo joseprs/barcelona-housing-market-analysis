@@ -60,6 +60,16 @@
         .result strong {
             font-size: 24px;
         }
+
+        .disclaimer {
+            margin-top: 30px;
+            padding: 16px;
+            background: #fff8e6;
+            border-left: 4px solid #d6a100;
+            color: #444;
+            font-size: 14px;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -176,5 +186,13 @@
             <p>Estimated price per sqm: {{ "{:,.0f}".format(result.predicted_price_per_sqm).replace(",", ".") }} €/sqm</p>
         </div>
     {% endif %}
+
+    <div class="disclaimer">
+        <strong>Disclaimer:</strong>
+        This prediction is based on housing listing data and should be interpreted as an estimated asking price,
+        not as a certified property valuation or financial recommendation. Actual transaction prices may differ
+        depending on negotiation, market conditions, property condition, financing constraints, and other factors
+        not captured by the model.
+    </div>
 </body>
 </html>

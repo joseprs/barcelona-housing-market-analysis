@@ -7,6 +7,7 @@ The app exposes the trained flat valuation model through:
 - a simple web form for manual predictions
 - a JSON API endpoint for programmatic predictions
 - a health-check endpoint
+- a Dockerized execution environment
 
 The model artifact is loaded from:
 
@@ -31,6 +32,22 @@ Then open:
 API documentation:
 
     http://127.0.0.1:8000/docs
+
+---
+
+## Docker Run
+
+Build the image from the project root:
+
+    docker build -f application/Dockerfile -t bcn-flat-price-app .
+
+Run the container:
+
+    docker run -p 8000:8000 bcn-flat-price-app
+
+Then open:
+
+    http://127.0.0.1:8000
 
 ---
 
@@ -67,16 +84,6 @@ Example response:
 
 ---
 
-## Docker Run
+## Disclaimer
 
-Build the image from the project root:
-
-    docker build -f application/Dockerfile -t bcn-flat-price-app .
-
-Run the container:
-
-    docker run -p 8000:8000 bcn-flat-price-app
-
-Then open:
-
-    http://127.0.0.1:8000
+The prediction is based on housing listing data and should be interpreted as an estimated asking price, not as a certified property valuation or financial recommendation.
